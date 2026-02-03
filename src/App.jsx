@@ -25,22 +25,25 @@ export default function App() {
     dad: { name: "백호준", phone: "010-1234-5678" },
     mom: { name: "심다은", phone: "010-8765-4321" }
   };
-  const mainPhotoUrl = "https://images.unsplash.com/photo-1544126566-475a89762df7?q=80&w=800&auto=format&fit=crop";
+  
+  // 📸 [설정] 메인 사진 경로 (public/images/main.jpg 파일 필요)
+  const mainPhotoUrl = "/images/main.jpg"; 
+  // const mainPhotoUrl = "https://images.unsplash.com/photo-1544126566-475a89762df7?q=80&w=800&auto=format&fit=crop"; // (이전 예시)
 
-  // 갤러리 이미지 ID 목록 (12장)
-  const galleryImageIds = [
-    '1522771753037-993b27958acd', // 1
-    '1519689680058-324335c77eba', // 2
-    '1510153806139-0b7274029272', // 3
-    '1503454537195-1dcabb73ffb9', // 4
-    '1467635626247-493484f4292e', // 5
-    '1515488042361-af9246005d7b', // 6
-    '1555252333-9f8e90e6e8e9',    // 7
-    '1556910103-1c02745a30bf',    // 8
-    '1505314771844-306917711283', // 9
-    '1520004434532-3d06d955923e', // 10
-    '1512762291583-4a11b069695d', // 11
-    '1519340333755-56e9c1d04579'  // 12
+  // 📸 [설정] 갤러리 이미지 경로 목록 (public/images/1.jpg ~ 12.jpg 파일 필요)
+  const galleryImages = [
+    '/images/1.jpg',
+    '/images/2.jpg',
+    '/images/3.jpg',
+    '/images/4.jpg',
+    '/images/5.jpg',
+    '/images/6.jpg',
+    '/images/7.jpg',
+    '/images/8.jpg',
+    '/images/9.jpg',
+    '/images/10.jpg',
+    '/images/11.jpg',
+    '/images/12.jpg'
   ];
 
   // Gemini States
@@ -144,7 +147,7 @@ export default function App() {
             <div className="mb-2 text-stone-500 tracking-[0.3em] text-xs uppercase">Invitation</div>
             <h1 className="text-3xl font-serif text-stone-800 mb-6">{babyName}의 첫 생일</h1>
             <div className="relative w-56 h-72 mb-8 shadow-xl rotate-1 border-4 border-white bg-white">
-                <img src={mainPhotoUrl} className="w-full h-full object-cover" alt="Main" />
+                <img src={mainPhotoUrl} className="w-full h-full object-cover" alt="Main" onError={(e) => e.target.src='https://via.placeholder.com/300x400?text=No+Image'} />
                 <div className="absolute -bottom-10 -right-10 text-6xl font-serif text-stone-200 opacity-50 -z-10">1st</div>
             </div>
             <div className="space-y-1 font-light text-stone-600">
@@ -218,7 +221,7 @@ export default function App() {
              </div>
           </div>
         );
-      case 3: // Gallery (Updated to 12 images)
+      case 3: // Gallery (Updated to use local paths)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
             <div className="text-center mb-6">
@@ -226,13 +229,14 @@ export default function App() {
                  <h2 className="text-xl font-bold text-stone-800">서한이의 순간들</h2>
             </div>
             <div className="grid grid-cols-2 gap-3 overflow-y-auto pb-4 custom-scrollbar">
-                {galleryImageIds.map((id, index) => (
+                {galleryImages.map((src, index) => (
                     <div key={index} className="aspect-square bg-stone-200 rounded-lg overflow-hidden shadow-sm">
                         <img 
-                           src={`https://images.unsplash.com/photo-${id}?q=80&w=300&auto=format&fit=crop`}
+                           src={src}
                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                            alt={`Gallery ${index + 1}`}
                            loading="lazy"
+                           onError={(e) => e.target.src='https://via.placeholder.com/300?text=Image+Not+Found'}
                         />
                     </div>
                 ))}
