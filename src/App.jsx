@@ -30,7 +30,9 @@ export default function App() {
   
   // 📸 [설정] 메인 미디어 경로 (사진 또는 동영상)
   // 팁: 동영상을 쓰려면 "/images/main.mp4"로 변경하고 파일을 넣어주세요.
-  const mainMediaUrl = "/images/main.mp4"; 
+  const mainMediaUrl = "/images/main.mp4";
+  // 📸 [설정] 동영상 로딩 전 보여줄 썸네일 이미지 (동영상 사용 시 필요)
+  const videoPosterUrl = "/images/main-poster.jpg";
   
   // 파일 확장자가 mp4, webm인지 확인하여 동영상 여부 판단
   const isVideo = mainMediaUrl.toLowerCase().endsWith('.mp4') || mainMediaUrl.toLowerCase().endsWith('.webm');
@@ -149,6 +151,7 @@ export default function App() {
                 {isVideo ? (
                     <video 
                         src={mainMediaUrl} 
+                        poster={videoPosterUrl}
                         className="w-full h-full object-cover" 
                         autoPlay 
                         loop 
