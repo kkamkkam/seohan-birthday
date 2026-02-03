@@ -6,7 +6,7 @@ const Icons = {
   ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
   Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#f43f5e" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
   MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
-  Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
+  Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/></svg>,
   Copy: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
   Phone: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
 };
@@ -26,6 +26,22 @@ export default function App() {
     mom: { name: "심다은", phone: "010-8765-4321" }
   };
   const mainPhotoUrl = "https://images.unsplash.com/photo-1544126566-475a89762df7?q=80&w=800&auto=format&fit=crop";
+
+  // 갤러리 이미지 ID 목록 (12장)
+  const galleryImageIds = [
+    '1522771753037-993b27958acd', // 1
+    '1519689680058-324335c77eba', // 2
+    '1510153806139-0b7274029272', // 3
+    '1503454537195-1dcabb73ffb9', // 4
+    '1467635626247-493484f4292e', // 5
+    '1515488042361-af9246005d7b', // 6
+    '1555252333-9f8e90e6e8e9',    // 7
+    '1556910103-1c02745a30bf',    // 8
+    '1505314771844-306917711283', // 9
+    '1520004434532-3d06d955923e', // 10
+    '1512762291583-4a11b069695d', // 11
+    '1519340333755-56e9c1d04579'  // 12
+  ];
 
   // Gemini States
   const [relation, setRelation] = useState("");
@@ -80,7 +96,7 @@ export default function App() {
 
   // AI API Call
   const callGemini = async (prompt) => {
-    const API_KEY = "AIzaSyAup8n9WMEG__ijfRUuR5Wgkb2Nfo2BKfE"; // System key
+    const API_KEY = ""; // System key
     try {
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`,
@@ -202,20 +218,21 @@ export default function App() {
              </div>
           </div>
         );
-      case 3: // Gallery
+      case 3: // Gallery (Updated to 12 images)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
             <div className="text-center mb-6">
                  <div className="text-xs font-bold text-stone-400 tracking-widest mb-1">GALLERY</div>
                  <h2 className="text-xl font-bold text-stone-800">서한이의 순간들</h2>
             </div>
-            <div className="grid grid-cols-2 gap-3 overflow-y-auto pb-4">
-                {[1, 2, 3, 4, 5, 6].map(i => (
-                    <div key={i} className="aspect-square bg-stone-200 rounded-lg overflow-hidden shadow-sm">
+            <div className="grid grid-cols-2 gap-3 overflow-y-auto pb-4 custom-scrollbar">
+                {galleryImageIds.map((id, index) => (
+                    <div key={index} className="aspect-square bg-stone-200 rounded-lg overflow-hidden shadow-sm">
                         <img 
-                           src={`https://images.unsplash.com/photo-${i === 1 ? '1522771753037-993b27958acd' : i === 2 ? '1519689680058-324335c77eba' : i === 3 ? '1510153806139-0b7274029272' : '1503454537195-1dcabb73ffb9'}?q=80&w=300&auto=format&fit=crop`}
-                           className="w-full h-full object-cover"
-                           alt="Gallery"
+                           src={`https://images.unsplash.com/photo-${id}?q=80&w=300&auto=format&fit=crop`}
+                           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                           alt={`Gallery ${index + 1}`}
+                           loading="lazy"
                         />
                     </div>
                 ))}
