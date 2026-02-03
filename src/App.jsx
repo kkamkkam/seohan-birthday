@@ -18,20 +18,20 @@ export default function App() {
   
   // 데이터
   const babyName = "백서한";
-  const eventDate = "2026.03.14 (토) 오후 6:30";
+  const eventDate = "2026.03.14 (토) 오후 12:00"; // 시간 변경: 오후 12:00
   const realBirthday = "03.12";
-  const locationName = "노보텔 앰배서더 수원";
+  const locationName = "노보텔 앰배서더 수원 더스퀘어 1층";
   const locationAddress = "경기 수원시 팔달구 덕영대로 902";
   const parents = {
-    // 부모님 사진 경로 (public/images 폴더 내 파일명으로 변경 필요)
-    dad: { name: "백호준", phone: "010-1234-5678", photo: "https://via.placeholder.com/100" },
-    mom: { name: "심다은", phone: "010-8765-4321", photo: "https://via.placeholder.com/100" }
+    // 부모님 사진 경로 수정 (father.jpg, mather.jpg)
+    dad: { name: "백호준", phone: "010-1234-5678", photo: "/images/father.jpg" },
+    mom: { name: "심다은", phone: "010-8765-4321", photo: "/images/mather.jpg" }
   };
   
   const mainPhotoUrl = "/images/main.jpg"; 
 
-  // 개월별 사진 데이터 (각 개월마다 2장씩)
-  // 실제 파일 경로로 수정해주세요 (예: /images/month1_1.jpg)
+  // 개월별 사진 데이터 (12개월까지 확장)
+  // 파일 경로 예시: /images/1.jpg ~ /images/24.jpg
   const monthlyPhotos = [
     { month: "1개월", photos: ["/images/1.jpg", "/images/2.jpg"] },
     { month: "2개월", photos: ["/images/3.jpg", "/images/4.jpg"] },
@@ -39,6 +39,12 @@ export default function App() {
     { month: "4개월", photos: ["/images/7.jpg", "/images/8.jpg"] },
     { month: "5개월", photos: ["/images/9.jpg", "/images/10.jpg"] },
     { month: "6개월", photos: ["/images/11.jpg", "/images/12.jpg"] },
+    { month: "7개월", photos: ["/images/13.jpg", "/images/14.jpg"] },
+    { month: "8개월", photos: ["/images/15.jpg", "/images/16.jpg"] },
+    { month: "9개월", photos: ["/images/17.jpg", "/images/18.jpg"] },
+    { month: "10개월", photos: ["/images/19.jpg", "/images/20.jpg"] },
+    { month: "11개월", photos: ["/images/21.jpg", "/images/22.jpg"] },
+    { month: "12개월", photos: ["/images/23.jpg", "/images/24.jpg"] },
   ];
 
   // Gemini States
@@ -162,7 +168,7 @@ export default function App() {
                 <div className="flex justify-around text-sm text-stone-600">
                     <div className="flex flex-col items-center gap-3">
                         <div className="w-16 h-16 rounded-full bg-stone-200 overflow-hidden shadow-sm border-2 border-white">
-                            <img src={parents.dad.photo} alt="아빠" className="w-full h-full object-cover" />
+                            <img src={parents.dad.photo} alt="아빠" className="w-full h-full object-cover" onError={(e) => e.target.src='https://via.placeholder.com/100?text=Dad'} />
                         </div>
                         <div>
                             <span className="block text-xs text-stone-400 mb-1">아빠</span>
@@ -171,7 +177,7 @@ export default function App() {
                     </div>
                     <div className="flex flex-col items-center gap-3">
                         <div className="w-16 h-16 rounded-full bg-stone-200 overflow-hidden shadow-sm border-2 border-white">
-                            <img src={parents.mom.photo} alt="엄마" className="w-full h-full object-cover" />
+                            <img src={parents.mom.photo} alt="엄마" className="w-full h-full object-cover" onError={(e) => e.target.src='https://via.placeholder.com/100?text=Mom'} />
                         </div>
                         <div>
                             <span className="block text-xs text-stone-400 mb-1">엄마</span>
@@ -202,10 +208,10 @@ export default function App() {
                     <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
                     <div>8</div><div>9</div><div>10</div><div>11</div>
                     
-                    {/* 12일: 케이크 중앙 정렬 및 크기 확대 */}
-                    <div className="flex flex-col items-center justify-start -mt-1">
-                        <span className="leading-none">12</span>
-                        <span className="text-lg leading-none mt-0.5">🎂</span>
+                    {/* 12일: 케이크 이모지 작게 (초기 버전 복원) */}
+                    <div className="relative">
+                        <span className="absolute -top-2 right-0 text-[10px]">🎂</span>
+                        <span>12</span>
                     </div>
                     
                     <div>13</div>
@@ -233,7 +239,7 @@ export default function App() {
              </div>
           </div>
         );
-      case 3: // Gallery (개월별 가로 스크롤 레이아웃)
+      case 3: // Gallery (개월별 가로 스크롤 레이아웃 - 12개월까지 확장)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn relative">
             <div className="text-center mb-6">
