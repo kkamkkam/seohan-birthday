@@ -8,7 +8,8 @@ const Icons = {
   MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
   Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/></svg>,
   Copy: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
-  Phone: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  Phone: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
+  X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
 };
 
 export default function App() {
@@ -54,6 +55,9 @@ export default function App() {
   const [selectedDoljabi, setSelectedDoljabi] = useState(null);
   const [doljabiResult, setDoljabiResult] = useState("");
   const [isPredicting, setIsPredicting] = useState(false);
+  
+  // 갤러리 확대 보기 State
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // 터치 스와이프 로직
   const [touchStart, setTouchStart] = useState(null);
@@ -73,8 +77,12 @@ export default function App() {
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) nextPage();
-    if (isRightSwipe) prevPage();
+    
+    // 모달이 열려있지 않을 때만 페이지 넘김
+    if (!selectedImage) {
+        if (isLeftSwipe) nextPage();
+        if (isRightSwipe) prevPage();
+    }
   };
 
   const nextPage = () => {
@@ -221,19 +229,25 @@ export default function App() {
              </div>
           </div>
         );
-      case 3: // Gallery (Updated to use local paths)
+      case 3: // Gallery (Updated Grid UI with Modal)
         return (
-          <div className="h-full flex flex-col p-6 animate-fadeIn">
+          <div className="h-full flex flex-col p-6 animate-fadeIn relative">
             <div className="text-center mb-6">
                  <div className="text-xs font-bold text-stone-400 tracking-widest mb-1">GALLERY</div>
                  <h2 className="text-xl font-bold text-stone-800">서한이의 순간들</h2>
             </div>
-            <div className="grid grid-cols-2 gap-3 overflow-y-auto pb-4 custom-scrollbar">
+            
+            {/* Grid Layout: 3 columns for better visibility of 12 images */}
+            <div className="grid grid-cols-3 gap-2 overflow-y-auto pb-4 custom-scrollbar content-start">
                 {galleryImages.map((src, index) => (
-                    <div key={index} className="aspect-square bg-stone-200 rounded-lg overflow-hidden shadow-sm">
+                    <div 
+                        key={index} 
+                        className="aspect-square bg-stone-200 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity rounded-sm"
+                        onClick={() => setSelectedImage(src)}
+                    >
                         <img 
                            src={src}
-                           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                           className="w-full h-full object-cover"
                            alt={`Gallery ${index + 1}`}
                            loading="lazy"
                            onError={(e) => e.target.src='https://via.placeholder.com/300?text=Image+Not+Found'}
@@ -241,6 +255,29 @@ export default function App() {
                     </div>
                 ))}
             </div>
+
+            {/* Image Modal Overlay */}
+            {selectedImage && (
+                <div 
+                    className="absolute inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fadeIn"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage(null);
+                    }}
+                >
+                    <button 
+                        className="absolute top-4 right-4 text-white p-2"
+                        onClick={() => setSelectedImage(null)}
+                    >
+                        <Icons.X />
+                    </button>
+                    <img 
+                        src={selectedImage} 
+                        className="max-w-full max-h-[80%] object-contain shadow-2xl rounded-sm"
+                        alt="Selected"
+                    />
+                </div>
+            )}
           </div>
         );
       case 4: // Gemini 1
