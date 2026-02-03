@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 const Icons = {
   ChevronLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>,
   ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
-  Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#f43f5e" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
+  Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#f43f5e" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
   MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
   Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/></svg>,
   Copy: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
@@ -14,36 +14,31 @@ const Icons = {
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 6;
+  const totalPages = 5; // 돌잡이 페이지 삭제로 총 페이지 수 변경
   
   // 데이터
   const babyName = "백서한";
-  const eventDate = "2026.03.14 (토) 오전 12:00";
+  const eventDate = "2026.03.14 (토) 오후 6:30";
   const realBirthday = "03.12";
   const locationName = "노보텔 앰배서더 수원";
   const locationAddress = "경기 수원시 팔달구 덕영대로 902";
   const parents = {
-    dad: { name: "백호준", phone: "010-1234-5678" },
-    mom: { name: "심다은", phone: "010-8765-4321" }
+    // 부모님 사진 경로 (public/images 폴더 내 파일명으로 변경 필요)
+    dad: { name: "백호준", phone: "010-1234-5678", photo: "https://via.placeholder.com/100" },
+    mom: { name: "심다은", phone: "010-8765-4321", photo: "https://via.placeholder.com/100" }
   };
   
-  // 📸 [설정] 메인 사진 경로 (public/images/main.jpg 파일 필요)
   const mainPhotoUrl = "/images/main.jpg"; 
 
-  // 📸 [설정] 갤러리 이미지 경로 목록 (public/images/1.jpg ~ 12.jpg 파일 필요)
-  const galleryImages = [
-    '/images/1.jpg',
-    '/images/2.jpg',
-    '/images/3.jpg',
-    '/images/4.jpg',
-    '/images/5.jpg',
-    '/images/6.jpg',
-    '/images/7.jpg',
-    '/images/8.jpg',
-    '/images/9.jpg',
-    '/images/10.jpg',
-    '/images/11.jpg',
-    '/images/12.jpg'
+  // 개월별 사진 데이터 (각 개월마다 2장씩)
+  // 실제 파일 경로로 수정해주세요 (예: /images/month1_1.jpg)
+  const monthlyPhotos = [
+    { month: "1개월", photos: ["/images/1.jpg", "/images/2.jpg"] },
+    { month: "2개월", photos: ["/images/3.jpg", "/images/4.jpg"] },
+    { month: "3개월", photos: ["/images/5.jpg", "/images/6.jpg"] },
+    { month: "4개월", photos: ["/images/7.jpg", "/images/8.jpg"] },
+    { month: "5개월", photos: ["/images/9.jpg", "/images/10.jpg"] },
+    { month: "6개월", photos: ["/images/11.jpg", "/images/12.jpg"] },
   ];
 
   // Gemini States
@@ -51,9 +46,6 @@ export default function App() {
   const [wishKeyword, setWishKeyword] = useState("");
   const [generatedMessage, setGeneratedMessage] = useState("");
   const [isGeneratingMsg, setIsGeneratingMsg] = useState(false);
-  const [selectedDoljabi, setSelectedDoljabi] = useState(null);
-  const [doljabiResult, setDoljabiResult] = useState("");
-  const [isPredicting, setIsPredicting] = useState(false);
   
   // 갤러리 확대 보기 State
   const [selectedImage, setSelectedImage] = useState(null);
@@ -134,16 +126,6 @@ export default function App() {
     setIsGeneratingMsg(false);
   };
 
-  const handleDoljabiPrediction = async (item) => {
-    setSelectedDoljabi(item);
-    setIsPredicting(true);
-    setDoljabiResult("");
-    const prompt = `Baby ${babyName} picked ${item} at Doljanchi. Predict future career/personality in Korean. Fun tone. 2 sentences.`;
-    const result = await callGemini(prompt);
-    setDoljabiResult(result);
-    setIsPredicting(false);
-  };
-
   // --- 페이지 컴포넌트들 ---
 
   const renderPage = () => {
@@ -166,30 +148,41 @@ export default function App() {
             </div>
           </div>
         );
-      case 1: // Greeting
+      case 1: // Greeting (부모님 사진 추가)
         return (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center animate-fadeIn bg-white/50">
-            <div className="mb-6"><Icons.Heart /></div>
+            {/* 하트 이모지 영역 확장 */}
+            <div className="mb-8 p-2"><Icons.Heart /></div>
             <h2 className="text-xl font-bold mb-6 text-stone-700 font-serif">초대합니다</h2>
             <div className="space-y-4 text-stone-600 leading-loose text-sm font-light">
               <p>화이트데이 사탕처럼 달콤한<br/>서한이가 첫 생일을 맞이했습니다.</p>
               <p>사랑스러운 아이로 자랄 수 있도록<br/>함께 자리하셔서 축복해주세요.</p>
             </div>
-            <div className="mt-12 w-full border-t border-stone-200 pt-6">
+            <div className="mt-12 w-full border-t border-stone-200 pt-8">
                 <div className="flex justify-around text-sm text-stone-600">
-                    <div>
-                        <span className="block text-xs text-stone-400 mb-1">아빠</span>
-                        <span className="font-bold">{parents.dad.name}</span>
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-16 h-16 rounded-full bg-stone-200 overflow-hidden shadow-sm border-2 border-white">
+                            <img src={parents.dad.photo} alt="아빠" className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                            <span className="block text-xs text-stone-400 mb-1">아빠</span>
+                            <span className="font-bold text-base">{parents.dad.name}</span>
+                        </div>
                     </div>
-                    <div>
-                        <span className="block text-xs text-stone-400 mb-1">엄마</span>
-                        <span className="font-bold">{parents.mom.name}</span>
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-16 h-16 rounded-full bg-stone-200 overflow-hidden shadow-sm border-2 border-white">
+                            <img src={parents.mom.photo} alt="엄마" className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                            <span className="block text-xs text-stone-400 mb-1">엄마</span>
+                            <span className="font-bold text-base">{parents.mom.name}</span>
+                        </div>
                     </div>
                 </div>
             </div>
           </div>
         );
-      case 2: // Calendar & Location
+      case 2: // Calendar & Location (달력 수정)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
              <div className="text-center mb-6">
@@ -199,15 +192,27 @@ export default function App() {
              
              {/* Calendar View */}
              <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-stone-100">
-                <div className="flex justify-between items-end mb-2 border-b border-stone-100 pb-2">
-                    <span className="text-xl font-bold text-stone-700">3월</span>
-                    <span className="text-xs text-stone-400">2026</span>
+                <div className="relative mb-6 text-center">
+                    <div className="text-2xl font-bold text-stone-700">3월</div>
+                    <div className="absolute top-1 right-0 text-xs text-stone-400">2026</div>
                 </div>
-                <div className="grid grid-cols-7 text-center text-xs gap-y-3 text-stone-500">
-                    <div className="text-rose-400">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+                <div className="grid grid-cols-7 text-center text-xs gap-y-4 text-stone-500">
+                    <div className="text-rose-400 font-medium pb-2">일</div><div className="font-medium pb-2">월</div><div className="font-medium pb-2">화</div><div className="font-medium pb-2">수</div><div className="font-medium pb-2">목</div><div className="font-medium pb-2">금</div><div className="font-medium pb-2">토</div>
+                    
                     <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
-                    <div>8</div><div>9</div><div>10</div><div>11</div><div className="relative"><span className="absolute -top-1 right-0 text-[8px] text-yellow-500">🎂</span>12</div><div>13</div>
-                    <div className="relative"><div className="absolute inset-0 bg-rose-500 rounded-full opacity-20"></div><span className="relative font-bold text-rose-600">14</span></div>
+                    <div>8</div><div>9</div><div>10</div><div>11</div>
+                    
+                    {/* 12일: 케이크 중앙 정렬 및 크기 확대 */}
+                    <div className="flex flex-col items-center justify-start -mt-1">
+                        <span className="leading-none">12</span>
+                        <span className="text-lg leading-none mt-0.5">🎂</span>
+                    </div>
+                    
+                    <div>13</div>
+                    <div className="relative flex items-center justify-center">
+                        <div className="absolute w-6 h-6 bg-rose-500 rounded-full opacity-20"></div>
+                        <span className="relative font-bold text-rose-600">14</span>
+                    </div>
                     <div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div>
                     <div>22</div><div>23</div><div>24</div><div>25</div><div>26</div><div>27</div><div>28</div>
                     <div>29</div><div>30</div><div>31</div>
@@ -223,12 +228,12 @@ export default function App() {
                     </div>
                 </div>
                 <div className="pl-7 text-xs text-stone-500">
-                    * 수원역 AK플라자 주차장 이용 (3시간 무료)
+                    * 호텔 주차장을 이용하시면 됩니다.
                 </div>
              </div>
           </div>
         );
-      case 3: // Gallery (Updated Grid UI with Modal)
+      case 3: // Gallery (개월별 가로 스크롤 레이아웃)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn relative">
             <div className="text-center mb-6">
@@ -236,21 +241,32 @@ export default function App() {
                  <h2 className="text-xl font-bold text-stone-800">서한이의 순간들</h2>
             </div>
             
-            {/* Grid Layout: 3 columns for better visibility of 12 images */}
-            <div className="grid grid-cols-3 gap-2 overflow-y-auto pb-4 custom-scrollbar content-start">
-                {galleryImages.map((src, index) => (
-                    <div 
-                        key={index} 
-                        className="aspect-square bg-stone-200 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity rounded-sm"
-                        onClick={() => setSelectedImage(src)}
-                    >
-                        <img 
-                           src={src}
-                           className="w-full h-full object-cover"
-                           alt={`Gallery ${index + 1}`}
-                           loading="lazy"
-                           onError={(e) => e.target.src='https://via.placeholder.com/300?text=Image+Not+Found'}
-                        />
+            {/* 개월별 리스트형 레이아웃 */}
+            <div className="flex-1 overflow-y-auto pb-4 custom-scrollbar space-y-4">
+                {monthlyPhotos.map((item, index) => (
+                    <div key={index} className="flex gap-3 items-center">
+                        {/* 왼쪽: 개월 수 텍스트 */}
+                        <div className="w-12 shrink-0 text-center">
+                            <span className="text-sm font-bold text-stone-600 block leading-tight">{item.month}</span>
+                        </div>
+                        
+                        {/* 오른쪽: 사진 2장 */}
+                        <div className="flex-1 flex gap-2">
+                            {item.photos.map((src, photoIndex) => (
+                                <div 
+                                    key={photoIndex} 
+                                    className="flex-1 aspect-square bg-stone-200 rounded-md overflow-hidden cursor-pointer shadow-sm"
+                                    onClick={() => setSelectedImage(src)}
+                                >
+                                    <img 
+                                        src={src} 
+                                        className="w-full h-full object-cover" 
+                                        alt={`${item.month} 사진`}
+                                        onError={(e) => e.target.src='https://via.placeholder.com/300?text=No+Image'}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -279,7 +295,7 @@ export default function App() {
             )}
           </div>
         );
-      case 4: // Gemini 1
+      case 4: // Gemini 1 (Message Only)
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
             <div className="text-center mb-6">
@@ -320,32 +336,7 @@ export default function App() {
                     </button>
                 </div>
             )}
-          </div>
-        );
-      case 5: // Gemini 2 & End
-        return (
-          <div className="h-full flex flex-col p-6 animate-fadeIn">
-            <div className="text-center mb-4">
-                 <div className="text-xs font-bold text-blue-400 tracking-widest mb-1 flex items-center justify-center gap-1"><Icons.Sparkles /> AI FUN</div>
-                 <h2 className="text-xl font-bold text-stone-800">돌잡이 예언</h2>
-            </div>
             
-            <div className="grid grid-cols-3 gap-2 mb-4">
-                {['연필', '실', '돈', '마이크', '청진기', '판사봉'].map(item => (
-                    <button 
-                        key={item}
-                        onClick={() => handleDoljabiPrediction(item)}
-                        className={`aspect-video rounded border text-xs flex flex-col items-center justify-center gap-1 ${selectedDoljabi === item ? 'bg-blue-100 border-blue-300 text-blue-800' : 'bg-white border-stone-200 text-stone-600'}`}
-                    >
-                        <span>{item}</span>
-                    </button>
-                ))}
-            </div>
-            
-            <div className="bg-stone-50 p-3 rounded h-20 text-xs text-stone-600 overflow-y-auto mb-8 border border-stone-100">
-                {isPredicting ? "미래를 보는 중..." : doljabiResult || "물건을 선택하면 AI가 미래를 점쳐드려요!"}
-            </div>
-
             <div className="mt-auto pt-6 text-center">
                 <div className="text-[10px] text-stone-400">
                     Seohan's 1st Birthday Invitation
@@ -413,27 +404,6 @@ export default function App() {
             </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.6s ease-out forwards;
-        }
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        /* 스크롤바 숨기기 효과 (모바일 터치 스크롤 최적화) */
-        .custom-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }
