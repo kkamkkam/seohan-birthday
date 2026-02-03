@@ -23,13 +23,14 @@ export default function App() {
   const locationName = "노보텔 앰배서더 수원 더스퀘어 1층";
   const locationAddress = "경기 수원시 팔달구 덕영대로 902";
   const parents = {
+    // 부모님 사진 경로 수정 (father.jpg, mother.jpg)
     dad: { name: "백호준", phone: "010-1234-5678", photo: "/images/father.jpg" },
     mom: { name: "심다은", phone: "010-8765-4321", photo: "/images/mother.jpg" }
   };
   
   // 📸 [설정] 메인 미디어 경로 (사진 또는 동영상)
   // 팁: 동영상을 쓰려면 "/images/main.mp4"로 변경하고 파일을 넣어주세요.
-  const mainMediaUrl = "/images/main.jpg"; 
+  const mainMediaUrl = "/images/main.mp4"; 
   
   // 파일 확장자가 mp4, webm인지 확인하여 동영상 여부 판단
   const isVideo = mainMediaUrl.toLowerCase().endsWith('.mp4') || mainMediaUrl.toLowerCase().endsWith('.webm');
