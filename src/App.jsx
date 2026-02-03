@@ -14,37 +14,40 @@ const Icons = {
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 5; // 돌잡이 페이지 삭제로 총 페이지 수 변경
+  const totalPages = 5; 
   
   // 데이터
   const babyName = "백서한";
-  const eventDate = "2026.03.14 (토) 오후 12:00"; // 시간 변경: 오후 12:00
+  const eventDate = "2026.03.14 (토) 오후 12:00"; 
   const realBirthday = "03.12";
   const locationName = "노보텔 앰배서더 수원 더스퀘어 1층";
   const locationAddress = "경기 수원시 팔달구 덕영대로 902";
   const parents = {
-    // 부모님 사진 경로 수정 (father.jpg, mather.jpg)
     dad: { name: "백호준", phone: "010-1234-5678", photo: "/images/father.jpg" },
     mom: { name: "심다은", phone: "010-8765-4321", photo: "/images/mother.jpg" }
   };
   
-  const mainPhotoUrl = "/images/main.jpg"; 
+  // 📸 [설정] 메인 미디어 경로 (사진 또는 동영상)
+  // 팁: 동영상을 쓰려면 "/images/main.mp4"로 변경하고 파일을 넣어주세요.
+  const mainMediaUrl = "/images/main.jpg"; 
+  
+  // 파일 확장자가 mp4, webm인지 확인하여 동영상 여부 판단
+  const isVideo = mainMediaUrl.toLowerCase().endsWith('.mp4') || mainMediaUrl.toLowerCase().endsWith('.webm');
 
   // 개월별 사진 데이터 (12개월까지 확장)
-  // 파일 경로 예시: /images/1.jpg ~ /images/24.jpg
   const monthlyPhotos = [
-    { month: "1개월", photos: ["/images/1.jpg", "/images/2.jpg"] },
-    { month: "2개월", photos: ["/images/3.jpg", "/images/4.jpg"] },
-    { month: "3개월", photos: ["/images/5.jpg", "/images/6.jpg"] },
-    { month: "4개월", photos: ["/images/7.jpg", "/images/8.jpg"] },
-    { month: "5개월", photos: ["/images/9.jpg", "/images/10.jpg"] },
-    { month: "6개월", photos: ["/images/11.jpg", "/images/12.jpg"] },
-    { month: "7개월", photos: ["/images/13.jpg", "/images/14.jpg"] },
-    { month: "8개월", photos: ["/images/15.jpg", "/images/16.jpg"] },
-    { month: "9개월", photos: ["/images/17.jpg", "/images/18.jpg"] },
-    { month: "10개월", photos: ["/images/19.jpg", "/images/20.jpg"] },
-    { month: "11개월", photos: ["/images/21.jpg", "/images/22.jpg"] },
-    { month: "12개월", photos: ["/images/23.jpg", "/images/24.jpg"] },
+    { month: "0개월", photos: ["/images/1.jpg", "/images/2.jpg"] },
+    { month: "1개월", photos: ["/images/3.jpg", "/images/4.jpg"] },
+    { month: "2개월", photos: ["/images/5.jpg", "/images/6.jpg"] },
+    { month: "3개월", photos: ["/images/7.jpg", "/images/8.jpg"] },
+    { month: "4개월", photos: ["/images/9.jpg", "/images/10.jpg"] },
+    { month: "5개월", photos: ["/images/11.jpg", "/images/12.jpg"] },
+    { month: "6개월", photos: ["/images/13.jpg", "/images/14.jpg"] },
+    { month: "7개월", photos: ["/images/15.jpg", "/images/16.jpg"] },
+    { month: "8개월", photos: ["/images/17.jpg", "/images/18.jpg"] },
+    { month: "9개월", photos: ["/images/19.jpg", "/images/20.jpg"] },
+    { month: "10개월", photos: ["/images/21.jpg", "/images/22.jpg"] },
+    { month: "11개월", photos: ["/images/23.jpg", "/images/24.jpg"] },
   ];
 
   // Gemini States
@@ -136,13 +139,30 @@ export default function App() {
 
   const renderPage = () => {
     switch(currentPage) {
-      case 0: // Cover
+      case 0: // Cover (동영상 지원 추가)
         return (
           <div className="h-full flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
             <div className="mb-2 text-stone-500 tracking-[0.3em] text-xs uppercase">Invitation</div>
             <h1 className="text-3xl font-serif text-stone-800 mb-6">{babyName}의 첫 생일</h1>
-            <div className="relative w-56 h-72 mb-8 shadow-xl rotate-1 border-4 border-white bg-white">
-                <img src={mainPhotoUrl} className="w-full h-full object-cover" alt="Main" onError={(e) => e.target.src='https://via.placeholder.com/300x400?text=No+Image'} />
+            <div className="relative w-56 h-72 mb-8 shadow-xl rotate-1 border-4 border-white bg-white overflow-hidden">
+                {isVideo ? (
+                    <video 
+                        src={mainMediaUrl} 
+                        className="w-full h-full object-cover" 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        onError={(e) => e.target.style.display = 'none'} // 에러시 숨김
+                    />
+                ) : (
+                    <img 
+                        src={mainMediaUrl} 
+                        className="w-full h-full object-cover" 
+                        alt="Main" 
+                        onError={(e) => e.target.src='https://via.placeholder.com/300x400?text=No+Image'} 
+                    />
+                )}
                 <div className="absolute -bottom-10 -right-10 text-6xl font-serif text-stone-200 opacity-50 -z-10">1st</div>
             </div>
             <div className="space-y-1 font-light text-stone-600">
@@ -154,10 +174,9 @@ export default function App() {
             </div>
           </div>
         );
-      case 1: // Greeting (부모님 사진 추가)
+      case 1: // Greeting
         return (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center animate-fadeIn bg-white/50">
-            {/* 하트 이모지 영역 확장 */}
             <div className="mb-8 p-2"><Icons.Heart /></div>
             <h2 className="text-xl font-bold mb-6 text-stone-700 font-serif">초대합니다</h2>
             <div className="space-y-4 text-stone-600 leading-loose text-sm font-light">
@@ -188,7 +207,7 @@ export default function App() {
             </div>
           </div>
         );
-      case 2: // Calendar & Location (달력 수정)
+      case 2: // Calendar & Location
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
              <div className="text-center mb-6">
@@ -196,7 +215,6 @@ export default function App() {
                  <h2 className="text-xl font-bold text-stone-800">언제, 어디서?</h2>
              </div>
              
-             {/* Calendar View */}
              <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-stone-100">
                 <div className="relative mb-6 text-center">
                     <div className="text-2xl font-bold text-stone-700">3월</div>
@@ -208,7 +226,6 @@ export default function App() {
                     <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
                     <div>8</div><div>9</div><div>10</div><div>11</div>
                     
-                    {/* 12일: 케이크 이모지 작게 (초기 버전 복원) */}
                     <div className="relative">
                         <span className="absolute -top-2 right-0 text-[10px]">🎂</span>
                         <span>12</span>
@@ -239,7 +256,7 @@ export default function App() {
              </div>
           </div>
         );
-      case 3: // Gallery (개월별 가로 스크롤 레이아웃 - 12개월까지 확장)
+      case 3: // Gallery
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn relative">
             <div className="text-center mb-6">
@@ -247,16 +264,13 @@ export default function App() {
                  <h2 className="text-xl font-bold text-stone-800">서한이의 순간들</h2>
             </div>
             
-            {/* 개월별 리스트형 레이아웃 */}
             <div className="flex-1 overflow-y-auto pb-4 custom-scrollbar space-y-4">
                 {monthlyPhotos.map((item, index) => (
                     <div key={index} className="flex gap-3 items-center">
-                        {/* 왼쪽: 개월 수 텍스트 */}
                         <div className="w-12 shrink-0 text-center">
                             <span className="text-sm font-bold text-stone-600 block leading-tight">{item.month}</span>
                         </div>
                         
-                        {/* 오른쪽: 사진 2장 */}
                         <div className="flex-1 flex gap-2">
                             {item.photos.map((src, photoIndex) => (
                                 <div 
@@ -277,7 +291,6 @@ export default function App() {
                 ))}
             </div>
 
-            {/* Image Modal Overlay */}
             {selectedImage && (
                 <div 
                     className="absolute inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fadeIn"
@@ -301,7 +314,7 @@ export default function App() {
             )}
           </div>
         );
-      case 4: // Gemini 1 (Message Only)
+      case 4: // Gemini 1
         return (
           <div className="h-full flex flex-col p-6 animate-fadeIn">
             <div className="text-center mb-6">
@@ -356,13 +369,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f0eee6] flex items-center justify-center font-sans overflow-hidden">
-      {/* 배경 텍스처 효과 */}
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
 
-      {/* Booklet Container */}
       <div className="relative w-full max-w-md h-[85vh] max-h-[700px] perspective-1000 mx-4">
-        
-        {/* Book Body */}
         <div 
             className="w-full h-full bg-[#faf9f6] shadow-2xl rounded-r-2xl rounded-l-md overflow-hidden relative border-r-8 border-stone-200 flex flex-col"
             style={{ 
@@ -373,15 +382,12 @@ export default function App() {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
         >
-            {/* Spine Effect (Left Shadow) */}
             <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-stone-300/50 to-transparent z-20 pointer-events-none"></div>
 
-            {/* Page Content */}
             <div className="flex-1 relative overflow-hidden">
                 {renderPage()}
             </div>
 
-            {/* Page Indicator & Navigation */}
             <div className="h-14 bg-[#faf9f6] border-t border-stone-100 flex items-center justify-between px-6 z-30">
                 <button 
                     onClick={prevPage} 
