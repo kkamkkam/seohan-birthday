@@ -25,7 +25,7 @@ export default function App() {
   const parents = {
     // 부모님 사진 경로 수정 (father.jpg, mather.jpg)
     dad: { name: "백호준", phone: "010-1234-5678", photo: "/images/father.jpg" },
-    mom: { name: "심다은", phone: "010-8765-4321", photo: "/images/mather.jpg" }
+    mom: { name: "심다은", phone: "010-8765-4321", photo: "/images/mother.jpg" }
   };
   
   const mainPhotoUrl = "/images/main.jpg"; 
