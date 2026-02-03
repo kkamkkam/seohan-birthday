@@ -18,7 +18,7 @@ export default function App() {
   
   // 데이터
   const babyName = "백서한";
-  const eventDate = "2026.03.14 (토) 오후 6:30";
+  const eventDate = "2026.03.14 (토) 오전 12:00";
   const realBirthday = "03.12";
   const locationName = "노보텔 앰배서더 수원";
   const locationAddress = "경기 수원시 팔달구 덕영대로 902";
@@ -29,7 +29,6 @@ export default function App() {
   
   // 📸 [설정] 메인 사진 경로 (public/images/main.jpg 파일 필요)
   const mainPhotoUrl = "/images/main.jpg"; 
-  // const mainPhotoUrl = "https://images.unsplash.com/photo-1544126566-475a89762df7?q=80&w=800&auto=format&fit=crop"; // (이전 예시)
 
   // 📸 [설정] 갤러리 이미지 경로 목록 (public/images/1.jpg ~ 12.jpg 파일 필요)
   const galleryImages = [
@@ -107,7 +106,7 @@ export default function App() {
 
   // AI API Call
   const callGemini = async (prompt) => {
-    const API_KEY = ""; // System key
+    const API_KEY = "AIzaSyAup8n9WMEG__ijfRUuR5Wgkb2Nfo2BKfE"; // System key
     try {
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`,
@@ -347,17 +346,8 @@ export default function App() {
                 {isPredicting ? "미래를 보는 중..." : doljabiResult || "물건을 선택하면 AI가 미래를 점쳐드려요!"}
             </div>
 
-            <div className="mt-auto border-t border-stone-200 pt-6 text-center">
-                <p className="text-sm font-bold text-stone-700 mb-4">연락처 안내</p>
-                <div className="flex justify-center gap-4">
-                    <a href={`tel:${parents.dad.phone}`} className="flex items-center gap-2 px-4 py-2 bg-stone-800 text-white rounded-full text-xs hover:bg-stone-700">
-                        <Icons.Phone /> 아빠에게 전화
-                    </a>
-                    <a href={`tel:${parents.mom.phone}`} className="flex items-center gap-2 px-4 py-2 bg-stone-800 text-white rounded-full text-xs hover:bg-stone-700">
-                        <Icons.Phone /> 엄마에게 전화
-                    </a>
-                </div>
-                <div className="text-[10px] text-stone-400 mt-6">
+            <div className="mt-auto pt-6 text-center">
+                <div className="text-[10px] text-stone-400">
                     Seohan's 1st Birthday Invitation
                 </div>
             </div>
@@ -423,6 +413,27 @@ export default function App() {
             </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        /* 스크롤바 숨기기 효과 (모바일 터치 스크롤 최적화) */
+        .custom-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }
